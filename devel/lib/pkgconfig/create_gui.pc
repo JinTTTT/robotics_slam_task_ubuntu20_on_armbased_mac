@@ -1,8 +1,0 @@
-prefix=/workspace/devel
-
-Name: create_gui
-Description: Description of create_gui
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: rbo_create localization

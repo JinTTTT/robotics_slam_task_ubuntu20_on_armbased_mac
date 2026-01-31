@@ -1,2 +1,0 @@
-create_gui:localization:mapping:rbo_create
--DCATKIN_DEVEL_PREFIX=/workspace/devel -DCMAKE_INSTALL_PREFIX=/workspace/install -G Unix Makefiles

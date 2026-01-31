@@ -1,8 +1,0 @@
-prefix=/workspace/devel
-
-Name: rbo_create
-Description: Description of rbo_create
-Version: 1.0.0
-Cflags: -I/workspace/devel/include
-Libs: -L${prefix}/lib 
-Requires: roscpp rospy geometry_msgs tf nav_msgs

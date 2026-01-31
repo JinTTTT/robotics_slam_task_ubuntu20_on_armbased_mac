@@ -16,13 +16,14 @@ docker run -it \
   -v "/Users/jtao/Documents/Study/Computer Engineering/WS2026/Robotics/git/workspace_assignment4:/workspace" \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
   -e DISPLAY=$DISPLAY \
-  ubuntu:20.04 /bin/bash
+  --name priceless_noyce \
+  ubuntu:20.04 /bin/bash\
 ```
 
 ## restart the container
 ```bash
-docker restart <container_id>
-docker exec -it <container_id> /bin/bash
+docker restart priceless_noyce
+docker exec -it priceless_noyce /bin/bash
 ```
 
 ## build 

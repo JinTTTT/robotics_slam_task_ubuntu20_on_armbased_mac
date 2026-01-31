@@ -19,7 +19,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_srvs
 )
 
-include_directories(${catkin_INCLUDE_DIRS})
+include_directories(${catkin_INCLUDE_DIRS} include)
 
 catkin_package(
   CATKIN_DEPENDS   
@@ -28,5 +28,5 @@ catkin_package(
 )
 
 
-add_executable(mapper src/MappingNode.cpp)
+add_executable(mapper src/MappingNode.cpp src/Utils.cpp)
 target_link_libraries(mapper ${catkin_LIBRARIES})
