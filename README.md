@@ -1,4 +1,24 @@
 # Build this project in a docker container in arm-based macbook
+## Setup X11 server
+1. Install XQuartz
+```bash
+brew install --cask xquartz
+```
+
+2. Start XQuartz
+
+
+Go to XQuartz → Settings → Security tab and make sure "Allow connections from network clients" is **checked**.
+
+Then **quit and restart XQuartz** for the settings to take effect.
+
+4. Allow X11 connections from any host
+```bash
+xhost +
+```
+
+You should see: `access control disabled, clients can connect from any host`
+
 ## docker setup
 1. start colima, mac use colima to run docker
 ```bash
@@ -10,20 +30,32 @@ colima start
 docker pull ubuntu:20.04
 ```
 
-3. start container 
+3. start container
+
+**Before running:** Make sure you've completed all X11 setup steps above (especially `xhost +`).
+
 ```bash
 docker run -it \
-  -v "/Users/jtao/Documents/Study/Computer Engineering/WS2026/Robotics/git/workspace_assignment4:/workspace" \
-  -v /tmp/.X11-unix:/tmp/.X11-unix \
-  -e DISPLAY=$DISPLAY \
-  --name priceless_noyce \
-  ubuntu:20.04 /bin/bash\
+  -v "/Users/jtao/Documents/Projects/simple_slam_ros1/robotics_slam_task_ubuntu20_on_armbased_mac:/workspace" \
+  -e DISPLAY=host.docker.internal:0 \
+  --name simple_slam_ros1 \
+  ubuntu:20.04 /bin/bash
 ```
+
+**Note:** We use `host.docker.internal:0` for DISPLAY because Docker on macOS (via Colima) doesn't properly sync Unix socket files. This uses network-based X11 forwarding instead.
+
+Try to test x11
+```bash
+apt-get update && apt-get install -y x11-apps
+xeyes
+```
+
+If you see a window with eyes, then X11 is working.
 
 ## restart the container
 ```bash
-docker restart priceless_noyce
-docker exec -it priceless_noyce /bin/bash
+docker restart simple_slam_ros1
+docker exec -it simple_slam_ros1 /bin/bash
 ```
 
 ## build 
@@ -47,7 +79,19 @@ apt install -y ros-noetic-desktop-full
 apt install -y build-essential
 ```
 
-4. First take other packages out of the path, only keep /mapping package
+4. Compile the workspace
+Source ros environment
+```bash
+source /opt/ros/noetic/setup.bash
+```
+
+Install dependencies for mapping package
+```bash
+apt install -y libwxgtk3.0-gtk3-dev libgl1-mesa-glx libglu1-mesa mesa-utils
+apt install -y ros-noetic-map-server
+```
+
+Then compile the workspace
 ```bash
 cd /workspace
 catkin_make
@@ -56,40 +100,6 @@ catkin_make
 ```bash
 source devel/setup.bash
 roslaunch mapping mapping.launch
-```
-
-### /rbo_create package
-1. install dependencies
-```bash
-apt install -y libwxgtk3.0-gtk3-dev
-```
-2. build
-```bash
-cd /workspace
-catkin_make
-```
-### /localization package
-1. install dependencies, it map_server package of ROS Noetic
-```bash
-apt install -y ros-noetic-map-server
-```
-2. build
-```bash
-cd /workspace
-catkin_make
-```
-
-### /create_gui package
-
-1. it needs wxWidgets - GUI library and opengl library
-```bash
-apt install -y libwxgtk3.0-gtk3-dev
-apt install -y libgl1-mesa-glx libglu1-mesa mesa-utils
-```
-2. build
-```bash
-cd /workspace
-catkin_make
 ```
 
 ## run the project
